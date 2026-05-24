@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arunima Upreti | Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="top-bar">
+        <p>Open for new opportunities! Contact me at <strong>arunimaupreti13@gmail.com</strong></p>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">ARUNIMA<span>.U</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header id="home" class="hero-section">
+        <div class="hero-content">
+            <img src="assets/39856d94-9f6d-44b3-b3ea-6c6c96fcf714.jpg" alt="Arunima Upreti" class="profile-img">
+            <h1>Arunima Upreti</h1>
+            <p class="subtitle">Data Analyst| Database Specialist | Designer</p>
+            <div class="hero-btns">
+                <a href="#projects" class="cta-btn primary">View Projects</a>
+                <a href="#contact" class="cta-btn secondary">Send Message</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-wrapper">
+        
+        <section id="about" class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="content-box">
+                <p>Hello! I am <strong>Arunima Upreti</strong>. I specialize in building digital solutions that combine robust backend logic with elegant frontend design.</p>
+                <p>My approach to web development is centered around clean code, efficient database architectures, and user-friendly interfaces.</p>
+            </div>
+        </section>
+
+        <section id="services" class="container">
+            <h2 class="section-title">Services I Provide</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Web Development</h3>
+                    <p>Responsive and fast-loading websites built with the latest standards.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Database Management</h3>
+                    <p>Relational database design and optimization using MySQL and PostgreSQL.</p>
+                </div>
+                <div class="service-card">
+                    <h3>UI/UX Design</h3>
+                    <p>Creating intuitive user journeys and modern aesthetic interfaces.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="container">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-wrapper">
+                <div class="skill-group">
+                    <h3>Frontend</h3>
+                    <div class="skill-tag">HTML5</div>
+                    <div class="skill-tag">CSS3 (Grid/Flex)</div>
+                    <div class="skill-tag">JavaScript</div>
+                </div>
+                <div class="skill-group">
+                    <h3>Backend & DB</h3>
+                    <div class="skill-tag">PHP</div>
+                    <div class="skill-tag">Supabase / SQL</div>
+                    <div class="skill-tag">API Integration</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-flex">
+                <div class="contact-info">
+                    <p><strong>Email:</strong> arunimaupreti13@gmail.com</p>
+                    <p><strong>Location:</strong> Available Globally (Remote)</p>
+                </div>
+                <form id="contactForm" class="contact-form">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="user_name" placeholder="Your Full Name" required>
+                    
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="user_email" placeholder="Your Email Address" required>
+                    
+                    <label for="message">Message</label>
+                    <textarea id="message" name="user_message" rows="5" placeholder="How can I help you?" required></textarea>
+                    
+                    <button type="submit" id="submitBtn" class="submit-btn">Save to Database</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 Arunima Upreti. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize Supabase Client
+        const SUPABASE_URL = 'https://jldrvdkhovlrxadspgax.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_1vP_3rODjROZoyuUssJc4A_2lFJkMVe';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // UI Loading State
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Sending...';
+
+            // Capture data from form
+            const formData = new FormData(contactForm);
+            const submission = {
+                user_name: formData.get('user_name'),
+                user_email: formData.get('user_email'),
+                user_message: formData.get('user_message')
+            };
+
+            // Insert into 'contact_submissions' table
+            const { error } = await _supabase
+                .from('contact_submissions')
+                .insert([submission]);
+
+            if (error) {
+                alert('Error: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Save to Database';
+            } else {
+                alert('Thank you! Your message has been saved.');
+                contactForm.reset();
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Save to Database';
+            }
+        });
+    </script>
+</body>
+</html>
